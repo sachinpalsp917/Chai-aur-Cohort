@@ -61,3 +61,19 @@ newArr[-2]=22
 // console.log(newArr);
 // console.log(arr);
 
+//Promises -> used to run the code asynchronously
+
+//In promise there are different stage:
+//1. Pending - promise is executing like calling an api after that a prmoise can go into 2 stages i.e either fulfilled(success) or rejected(fail)
+//After writing the promise there are two methods that we can use:
+//.then(userFn) - it's run only when the promise is fulfilled and it run the callback function provided otherwise
+//.catch(userFn) - it only run runs when the promise is rejected
+//now there is another function called .finally(userFn) it runs whether the promise is fulfilled or rejected only if you have defined it
+
+console.log("Hi");
+const data = fetch("https://api.freeapi.app/api/v1/public/randomproducts")
+// console.log(data); //now this here shows it's pending
+data.then((res)=>console.log("promise resolve hogaya")) //this gives us the data
+data.catch((res)=> {console.log("promise ne dhoka diya")}) //this will only run when the data is not coming
+data.finally((res)=>console.log("mai toh chalunga")) //this will run no matter what state is the promise on
+console.log("bye");

@@ -98,6 +98,10 @@ const verifyUser = async (req, res) => {
   //save
   await user.save();
   //return response
+  return res.status(200).json({
+    message: "Account verified",
+    success: true,
+  });
 };
 
 const loginUser = async (req, res) => {
@@ -126,7 +130,9 @@ const loginUser = async (req, res) => {
       });
     }
 
-    const token = jwt.sign({ id: user._id }, "shhhhh", { expiresIn: 60 });
+    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
+      expiresIn: "24h",
+    });
 
     const cookieOptions = {
       httpOnly: true,
@@ -148,4 +154,71 @@ const loginUser = async (req, res) => {
   }
 };
 
-export { registerUser, verifyUser, loginUser };
+const userProfile = async (req, res) => {
+  try {
+    const user = await User.findById(req.user.id).select("-password");
+    console.log(user);
+    if (!user) {
+      return res.status(400).json({
+        success: false,
+        message: "User not found",
+      });
+    }
+    return res.status(200).json({
+      success: true,
+      user,
+    });
+  } catch (error) {
+    return res.status(400).json({
+      success: false,
+      message: "user not found",
+    });
+  }
+};
+
+const logoutUser = async (req, res) => {
+  try {
+    res.cookie("token", "");
+    res.status(200).json({
+      success: true,
+      message: "Logged out successfully",
+    });
+  } catch (error) {
+    res.status(400).json({
+      success: true,
+      message: "Logged out failed",
+    });
+  }
+};
+
+const forgetPassword = async (req, res) => {
+  //get email
+  //find user based on email
+  //reset token + reset expiry => Date.now() + 10*60*1000 => user.save()
+  //send mail => design url
+};
+const resetPassword = async (req, res) => {
+  //collect token from params
+  //password from req.body
+  const { token } = req.params;
+  const { password } = req.body;
+
+  try {
+    const user = await User.findOne({
+      resetPasswordToken: token,
+      resetPasswordExpires: { $gt: Date.now() },
+    });
+    //set password in db
+    //resettoken, resetExpiry => reset
+    //save
+  } catch (error) {}
+};
+export {
+  registerUser,
+  verifyUser,
+  loginUser,
+  userProfile,
+  logoutUser,
+  forgetPassword,
+  resetPassword,
+};

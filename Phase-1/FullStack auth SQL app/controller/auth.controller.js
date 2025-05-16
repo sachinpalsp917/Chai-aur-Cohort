@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import { PrismaClient } from "@prisma/client";
 import bcryptjs from "bcryptjs";
 import crypto from "crypto";
@@ -329,3 +330,10 @@ export {
   resetPasswordVerifcation,
   updateUser,
 };
+=======
+const registerUser = async function (req, res) {
+  console.log("user registers success");
+};
+
+export { registerUser };
+>>>>>>> origin/main

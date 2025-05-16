@@ -1,5 +1,4 @@
 import express from "express";
-<<<<<<< HEAD
 import {
   getUser,
   loginUser,
@@ -25,12 +24,5 @@ userRoutes.post(
   resetPasswordVerifcation
 );
 userRoutes.patch("/update", isLoggedIn, updateUser);
-=======
-import { registerUser } from "../controller/auth.controller.js";
-
-const userRoutes = express.Router();
-
-userRoutes.get("/register", registerUser);
->>>>>>> origin/main
 
 export default userRoutes;

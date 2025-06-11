@@ -1,6 +1,12 @@
 import mongoose from "mongoose";
 import { AvailableTaskStatuses, TaskStatus } from "../constants/interfaces";
 
+interface Attachment {
+  url: string;
+  mimetype: string;
+  size: number;
+}
+
 export interface TaskDocument extends mongoose.Document {
   title: string;
   description: string;
@@ -8,9 +14,16 @@ export interface TaskDocument extends mongoose.Document {
   assignedTo: mongoose.Types.ObjectId;
   assignedBy: mongoose.Types.ObjectId;
   status: TaskStatus;
+  attachments: Attachment[];
   createdAt: Date;
   updatedAt: Date;
 }
+
+const AttachmentSchema = new mongoose.Schema<Attachment>({
+  url: { type: String, required: true },
+  mimetype: { type: String, required: true },
+  size: { type: Number, required: true },
+});
 
 const taskSchema = new mongoose.Schema<TaskDocument>(
   {
@@ -42,6 +55,10 @@ const taskSchema = new mongoose.Schema<TaskDocument>(
       type: String,
       enum: AvailableTaskStatuses,
       default: TaskStatus.TODO,
+    },
+    attachments: {
+      type: [AttachmentSchema],
+      default: [],
     },
   },
   { timestamps: true },

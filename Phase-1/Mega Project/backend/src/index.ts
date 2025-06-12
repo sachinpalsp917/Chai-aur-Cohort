@@ -2,12 +2,13 @@ import "dotenv/config";
 import express from "express";
 import { PORT } from "./constants/env";
 import connectToDatabase from "./config/db";
+import healthRoutes from "./routes/health.route";
 
 const app = express();
 
-connectToDatabase()
-  .then()
-  .catch((err) => {
-    console.error(`MongoDB connection error`, err);
-    process.exit(1);
-  });
+app.use("/api/v1", healthRoutes);
+
+app.listen(PORT, () => {
+  console.log(`Server running on ${PORT}`);
+  connectToDatabase();
+});

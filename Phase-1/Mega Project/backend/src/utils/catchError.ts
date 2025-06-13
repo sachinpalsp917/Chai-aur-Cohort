@@ -6,14 +6,22 @@ type AsyncController = (
   next: NextFunction,
 ) => Promise<any>;
 
-const catchError =
-  (controller: AsyncController): AsyncController =>
-  async (req, res, next) => {
-    try {
-      await controller(req, res, next);
-    } catch (error) {
-      next(error);
-    }
-  };
+// const catchError =
+//   (controller: AsyncController): AsyncController =>
+//   async (req, res, next) => {
+//     try {
+//       await controller(req, res, next);
+//     } catch (error) {
+//       next(error);
+//     }
+//   };
 
-export default catchError;
+// export default catchError;
+
+export function asyncHandler(requestHandler: AsyncController) {
+  return function (req: Request, res: Response, next: NextFunction) {
+    Promise.resolve(requestHandler(req, res, next)).catch(function (err) {
+      next(err);
+    });
+  };
+}

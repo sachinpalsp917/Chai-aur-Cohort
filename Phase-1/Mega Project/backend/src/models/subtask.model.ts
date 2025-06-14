@@ -5,7 +5,7 @@ export interface subTaskDocument extends mongoose.Document {
   task: mongoose.Types.ObjectId;
   isCompleted: boolean;
   createdBy: mongoose.Types.ObjectId;
-  createAt: Date;
+  createdAt: Date;
   updatedAt: Date;
 }
 const subtaskSchema = new mongoose.Schema<subTaskDocument>(

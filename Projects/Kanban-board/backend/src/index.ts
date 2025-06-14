@@ -3,8 +3,9 @@ import express from "express";
 import connectToDatabase from "./config/db";
 import cookieParser from "cookie-parser";
 import cors from "cors";
-import { APP_ORIGIN } from "./constants/env";
+import { APP_ORIGIN, PORT } from "./constants/env";
 import { OK } from "./constants/statusCode";
+import authRoutes from "./routes/auth.routes";
 
 const app = express();
 
@@ -22,7 +23,9 @@ app.use("/health", (req, res) => {
   res.status(OK).json({ message: "Server is running" });
 });
 
-app.listen(3000, () => {
-  console.log(`Server running on PORT 3000`);
+app.use("/api/v1/auth", authRoutes);
+
+app.listen(PORT, () => {
+  console.log(`Server running on PORT ${PORT}`);
   connectToDatabase();
 });
